@@ -26,7 +26,7 @@ void Gui::update(bool &useTexture, bool &wireFrame, float &translation, float &s
 	ImGui::Checkbox("Wire Frame", &wireFrame);
 
 	ImGui::Text("Model");
-	ImGui::SliderFloat3("Translation", &translation, -2.0f, 2.0f);
+	ImGui::SliderFloat3("Translation", &translation, -5.0f, 0.0f);
 	ImGui::SliderFloat3("Rotation", &rotation, -3.14f, 3.14f);
 	// ImGui::SliderFloat3("Scaling", &scaling, 0.1f, 2.0f);
 	ImGui::SliderFloat("Scaling", &scaling, 0.1f, 2.0f);

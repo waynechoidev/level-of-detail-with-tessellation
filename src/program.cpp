@@ -96,7 +96,7 @@ void Program::genFragmentBuffers()
 {
 	glGenBuffers(1, &_uboFragment);
 	glBindBuffer(GL_UNIFORM_BUFFER, _uboFragment);
-	glBufferData(GL_UNIFORM_BUFFER, 16, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_UNIFORM_BUFFER, 20, nullptr, GL_DYNAMIC_DRAW);
 	GLuint fragmentBlockIndex = glGetUniformBlockIndex(_programID, "Fragment");
 	glUniformBlockBinding(_programID, fragmentBlockIndex, 1);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, _uboFragment);
@@ -131,12 +131,13 @@ void Program::bindVertexBuffers(glm::mat4 model, glm::mat4 projection, glm::mat4
 	glBufferSubData(GL_UNIFORM_BUFFER, 128, 64, glm::value_ptr(projection));
 }
 
-void Program::bindFragmentBuffers(bool useTexture, glm::vec3 viewPosition, const Material &material, const Light &light)
+void Program::bindFragmentBuffers(bool useTexture, glm::vec3 viewPosition, float depth, const Material &material, const Light &light)
 {
 	glBindBuffer(GL_UNIFORM_BUFFER, _uboFragment);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, 12, glm::value_ptr(viewPosition));
 	int useTextureInt = useTexture ? 1 : 0;
 	glBufferSubData(GL_UNIFORM_BUFFER, 12, 4, &useTextureInt);
+	glBufferSubData(GL_UNIFORM_BUFFER, 16, 4, &depth);
 
 	glBindBuffer(GL_UNIFORM_BUFFER, _uboMaterial);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, 4, &material.ambient);

@@ -8,9 +8,10 @@ out vec4 colour;
 
 layout(std140) uniform Fragment
 {
-    vec3 viewPosition; // 12    4
-    bool useTexture; // 4       0
-    // 16
+    vec3 viewPosition; // 12    0
+    bool useTexture; // 4       12
+    float depth; // 4           16
+    // 20
 };
 
 layout(std140) uniform Material
@@ -135,5 +136,5 @@ void main()
     
     res += computeSpotLight(posWorld, normalWorld, toEye) * light.isSpot;
 
-	colour = useTexture ? vec4(res, 1.0) * texture(theTexture, TexCoord) : vec4(res, 1.0);
+	colour = useTexture ? vec4(res, 1.0) * texture(theTexture, TexCoord, -depth) : vec4(res, 1.0);
 }

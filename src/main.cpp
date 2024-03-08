@@ -32,8 +32,8 @@ int main()
 
 	// Model
 	glm::vec3 translation = glm::vec3(0.0f);
-	glm::vec3 scaling = glm::vec3(0.6f);
-	glm::vec3 rotation = {0.7f, 2.5f, 0.0f};
+	glm::vec3 scaling = glm::vec3(0.7f);
+	glm::vec3 rotation = {0.4f, 2.5f, 0.0f};
 
 	// Projection
 	float aspectRatio = (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight();
@@ -85,7 +85,7 @@ int main()
 
 		mainProgram.use();
 		mainProgram.bindVertexBuffers(model, projection, camera.calculateViewMatrix());
-		mainProgram.bindFragmentBuffers(useTexture, camera.getPosition(), material, light);
+		mainProgram.bindFragmentBuffers(useTexture, camera.getPosition(), translation.z, material, light);
 		earthTexture.use();
 		sphere.draw();
 		gui.render();

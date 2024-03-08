@@ -17,8 +17,17 @@ int main()
 	Gui gui = Gui();
 	gui.initialise(mainWindow.getWindow());
 
-	Sphere sphere = Sphere(1.0f);
-	sphere.initialise();
+	Sphere sphere_1 = Sphere(1.0f, 30, 30);
+	sphere_1.initialise();
+
+	Sphere sphere_2 = Sphere(1.0f, 20, 20);
+	sphere_2.initialise();
+
+	Sphere sphere_3 = Sphere(1.0f, 10, 10);
+	sphere_3.initialise();
+
+	Sphere sphere_4 = Sphere(1.0f, 5, 5);
+	sphere_4.initialise();
 
 	std::filesystem::path currentDir = std::filesystem::path(__FILE__).parent_path();
 
@@ -87,7 +96,14 @@ int main()
 		mainProgram.bindVertexBuffers(model, projection, camera.calculateViewMatrix());
 		mainProgram.bindFragmentBuffers(useTexture, camera.getPosition(), translation.z, material, light);
 		earthTexture.use();
-		sphere.draw();
+		if (translation.z > -1)
+			sphere_1.draw();
+		else if (translation.z > -2)
+			sphere_2.draw();
+		else if (translation.z > -3)
+			sphere_3.draw();
+		else
+			sphere_4.draw();
 		gui.render();
 
 		glUseProgram(0);

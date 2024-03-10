@@ -6,19 +6,15 @@ Program::Program()
 	clear();
 }
 
-void Program::createFromString(std::string vertexCode, std::string fragmentCode)
+void Program::createFromFiles(std::string vertexLocation, std::string tessellationControlLocation,
+							  std::string tessellationEvaluationLocation, std::string fragmentLocation)
 {
-	compileShader(vertexCode, fragmentCode);
-}
+	std::string vertexCode = readFile(vertexLocation);
+	std::string tessellationControlCode = readFile(tessellationControlLocation);
+	std::string tessellationEvaluationCode = readFile(tessellationEvaluationLocation);
+	std::string fragmentCode = readFile(fragmentLocation);
 
-void Program::createFromFiles(std::string vertexLocation, std::string fragmentLocation)
-{
-	std::string vertexString = readFile(vertexLocation);
-	std::string fragmentString = readFile(fragmentLocation);
-	const char *vertexCode = vertexString.c_str();
-	const char *fragmentCode = fragmentString.c_str();
-
-	compileShader(vertexCode, fragmentCode);
+	compileShader(vertexCode, tessellationControlCode, tessellationEvaluationCode, fragmentCode);
 }
 
 std::string Program::readFile(std::string fileLocation)
@@ -28,7 +24,7 @@ std::string Program::readFile(std::string fileLocation)
 
 	if (!fileStream.is_open())
 	{
-		std::cout << "Failed to read %s! File doesn't exist." << fileLocation;
+		std::cout << "Failed to read " << fileLocation << "! File doesn't exist." << std::endl;
 		return "";
 	}
 
@@ -43,7 +39,8 @@ std::string Program::readFile(std::string fileLocation)
 	return content;
 }
 
-void Program::compileShader(std::string vertexCode, std::string fragmentCode)
+void Program::compileShader(std::string vertexCode, std::string tessellationControlCode,
+							std::string tessellationEvaluationCode, std::string fragmentCode)
 {
 	_programID = glCreateProgram();
 
@@ -54,6 +51,8 @@ void Program::compileShader(std::string vertexCode, std::string fragmentCode)
 	}
 
 	addShader(_programID, vertexCode, GL_VERTEX_SHADER);
+	addShader(_programID, tessellationControlCode, GL_TESS_CONTROL_SHADER);
+	addShader(_programID, tessellationEvaluationCode, GL_TESS_EVALUATION_SHADER);
 	addShader(_programID, fragmentCode, GL_FRAGMENT_SHADER);
 
 	GLint result = 0;
@@ -64,8 +63,7 @@ void Program::compileShader(std::string vertexCode, std::string fragmentCode)
 	if (!result)
 	{
 		glGetProgramInfoLog(_programID, sizeof(eLog), NULL, eLog);
-		std::cout << "Error linking program: '%s'\n"
-				  << eLog;
+		std::cout << "Error linking program: " << eLog << std::endl;
 		return;
 	}
 
@@ -74,8 +72,7 @@ void Program::compileShader(std::string vertexCode, std::string fragmentCode)
 	if (!result)
 	{
 		glGetProgramInfoLog(_programID, sizeof(eLog), NULL, eLog);
-		std::cout << "Error validating program: '%s'\n"
-				  << eLog;
+		std::cout << "Error validating program: " << eLog << std::endl;
 		return;
 	}
 }
@@ -192,8 +189,7 @@ void Program::addShader(GLuint theProgram, std::string shaderCode, GLenum shader
 	if (!result)
 	{
 		glGetShaderInfoLog(theShader, sizeof(eLog), NULL, eLog);
-		std::cout << "Error compiling the %d shader: '%s'\n"
-				  << shaderType << eLog;
+		std::cout << "Error compiling the " << shaderType << " shader: " << eLog << std::endl;
 		return;
 	}
 

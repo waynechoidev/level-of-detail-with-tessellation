@@ -17,8 +17,8 @@ class Program
 public:
 	Program();
 
-	void createFromString(std::string vertexCode, std::string fragmentCode);
-	void createFromFiles(std::string vertexLocation, std::string fragmentLocation);
+	void createFromFiles(std::string vertexLocation, std::string tessellationControlLocation,
+						 std::string tessellationEvaluationLocation, std::string fragmentLocation);
 
 	std::string readFile(std::string fileLocation);
 
@@ -34,7 +34,8 @@ private:
 	GLuint _programID;
 	GLuint _uboMatrices, _uboFragment, _uboMaterial, _uboLight;
 
-	void compileShader(std::string vertexCode, std::string fragmentCode);
+	void compileShader(std::string vertexCode, std::string tessellationControlCode,
+					   std::string tessellationEvaluationCode, std::string fragmentCode);
 	void addShader(GLuint theProgram, std::string shaderCode, GLenum shaderType);
 	void clear();
 };
